@@ -1,4 +1,4 @@
-class Book
+class Book < ActiveRecord::Base
   validates_presence_of :title, :author
 
 end

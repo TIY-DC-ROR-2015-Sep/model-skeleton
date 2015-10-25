@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+ <html>
+ 	<head>
+ 		<title></title>
+ 	</head>
+ 	<body>
+    <% if current_user %>
+   		<% Book.all.each do |b| %>
+      <li>
+        <%= b.title %> by <%= b.author %>
+        <% if b.checked_out == false %>
+          <button>Check Out</button>
+        <% else %>
+          <strong>Checked Out</strong>
+        <% end %>
+      </li>
+      <% end %>
+    <% else %>
+      <h2>Please log in with your email and password.</h2>
+      <form method="post" action="/handle_login">
+        <label>
+          Email
+          <input type="email" name="email">
+        </label>
+        <label>
+          Password
+          <input type="password" name="password">
+        </label>
+        <button>Login</button>
+      </form>
+    <% end %>
+ 	</body>
+ </html>
