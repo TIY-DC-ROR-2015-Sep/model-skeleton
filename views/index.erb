@@ -9,7 +9,10 @@
       <li>
         <%= b.title %> by <%= b.author %>
         <% if b.checked_out == false %>
-          <button>Check Out</button>
+        <form action="/checkout" method="POST">
+            <input type="hidden" name="book_id" value="<%= b.id %>">
+            <button>Checkout</button>
+        </form>
         <% else %>
           <strong>Checked Out</strong>
         <% end %>

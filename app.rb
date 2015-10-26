@@ -14,6 +14,13 @@ class Bookshelf < Sinatra::Base
     @current_user ||= User.find_by_id(logged_in_user_id)
   end
 
+  def login_required!
+    unless current_user
+      set_message "You must login to view this page"
+      redirect to("/login")
+    end
+  end
+
   get '/' do
     erb :index
   end
@@ -28,12 +35,30 @@ class Bookshelf < Sinatra::Base
       password: params[:password])
 
     if found
-      session[:logged_in_user_id] = found.id
+      session[:logged_in_user_id] = found.ids
       redirect to("/")
     else
       @error = "Invalid username or password"
       erb :login
     end
+  end
+
+  post "/checkout" do
+    login_required!
+    c = CheckedOutBook.new
+    c.user_id = current_user.id
+    c.book_id = params[:book_id].to_i
+    cb = Book.find_by_id(params[:book_id])
+    cb.checked_out = true
+    c.save!
+    cb.save!
+    binding.pry
+    # if c.available?
+    #   c.save!
+    # else
+    #   # error message
+    # end
+    redirect to("/")
   end
 
 end
