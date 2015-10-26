@@ -13,6 +13,11 @@
             <input type="hidden" name="book_id" value="<%= b.id %>">
             <button>Checkout</button>
         </form>
+        <% elsif (b.checked_out == true) %>
+        <form action="/return" method="POST">
+            <input type="hidden" name="book_id" value="<%= b.id %>">
+            <button>Return</button>
+        </form>
         <% else %>
           <strong>Checked Out</strong>
         <% end %>

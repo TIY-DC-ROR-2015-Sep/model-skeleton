@@ -1,4 +1,4 @@
-require 'sinatra'
+require 'sinatra/base'
 require 'pry'
 
 require './db/setup'
@@ -52,13 +52,24 @@ class Bookshelf < Sinatra::Base
     cb.checked_out = true
     c.save!
     cb.save!
-    binding.pry
     # if c.available?
     #   c.save!
     # else
     #   # error message
     # end
     redirect to("/")
+  end
+
+  post "/return" do
+    login_required!
+    c = CheckedOutBook.where(id: current_user.id)
+    c.user_id = current_user.id
+    c.book_id = params[:book_id].to_i
+    cb = Book.find_by_id(params[:book_id])
+    cb.checked_out = false
+    c.save!
+    cb.save!
+    redirect to ("/")
   end
 
 end
