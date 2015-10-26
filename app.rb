@@ -62,9 +62,8 @@ class Bookshelf < Sinatra::Base
 
   post "/return" do
     login_required!
-    c = CheckedOutBook.where(id: current_user.id)
-    c.user_id = current_user.id
-    c.book_id = params[:book_id].to_i
+    c = CheckedOutBook.find_by_id(params[:book_id])
+    c.delete!
     cb = Book.find_by_id(params[:book_id])
     cb.checked_out = false
     c.save!
